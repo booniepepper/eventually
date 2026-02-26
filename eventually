@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+EVENTUALLY_VERSION='1.0'
+
+print_usage() {
+    echo "eventually $EVENTUALLY_VERSION"
+    echo
+    echo "USAGE: eventually [FLAGS...] COMMAND [ARGS...]"
+    # TODO: Add flags etc
+}
+
+if [ "$#" -eq 0 ]
+then
+    print_usage
+    exit 0
+fi
+
+WAIT_SECONDS=30
+
+case "$1" in
+    help|--help|-h)
+        print_usage
+        exit 0
+        ;;
+
+    version|--version|-V)
+        echo "$CROZBI_VERSION"
+        exit 0
+        ;;
+
+    # TODO: Add --seconds
+esac
+
+WAIT_MESSAGE="Trying again in $WAIT_SECONDS seconds..."
+
+while ! eval "$@"; do
+    echo "$WAIT_MESSAGE"
+    sleep "$WAIT_SECONDS"
+done
